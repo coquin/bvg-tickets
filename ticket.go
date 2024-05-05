@@ -1,23 +1,28 @@
 package bvg_tickets
 
-import "time"
+import (
+	"bvg-tickets/utils"
+	"time"
+)
 
 type validation struct {
 	validatedAt time.Time
+	validUntil  time.Time
 }
 
 type Ticket struct {
-	v *validation
+	policy Policy
+	v      *validation
 }
 
-func New() Ticket {
-	return Ticket{nil}
+func New(policy Policy) Ticket {
+	return Ticket{policy, nil}
 }
 
-func (t *Ticket) IsValid() bool {
-	return t.v != nil
+func (t *Ticket) Validate(clock utils.Clock) {
+	t.v = &validation{clock.Now(), clock.Now().Add(t.policy.ValidFor)}
 }
 
-func (t *Ticket) Validate() {
-	t.v = &validation{time.Now()}
+func (t *Ticket) IsValid(clock utils.Clock) bool {
+	return t.v != nil && !clock.Now().After(t.v.validUntil)
 }
