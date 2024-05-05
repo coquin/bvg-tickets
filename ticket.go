@@ -20,7 +20,8 @@ func New(policy Policy) Ticket {
 }
 
 func (t *Ticket) Validate(clock clock.Clock) {
-	t.v = &validation{clock.Now(), clock.Now().Add(t.policy.ValidFor)}
+	now := clock.Now()
+	t.v = &validation{now, now.Add(t.policy.ValidFor)}
 }
 
 func (t *Ticket) IsValid(clock clock.Clock) bool {
