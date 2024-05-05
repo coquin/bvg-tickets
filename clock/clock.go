@@ -1,4 +1,4 @@
-package utils
+package clock
 
 import "time"
 
@@ -12,6 +12,6 @@ func (realClock) Now() time.Time {
 	return time.Now()
 }
 
-func NewClock() Clock {
+func New() Clock {
 	return realClock{}
 }

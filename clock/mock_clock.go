@@ -1,4 +1,4 @@
-package utils
+package clock
 
 import "time"
 
@@ -6,7 +6,7 @@ type MockClock struct {
 	t time.Time
 }
 
-func NewMockClock(t time.Time) MockClock {
+func Mock(t time.Time) MockClock {
 	return MockClock{t}
 }
 

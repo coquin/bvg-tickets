@@ -2,7 +2,7 @@ package bvg_tickets_test
 
 import (
 	bvgtickets "bvg-tickets"
-	"bvg-tickets/utils"
+	"bvg-tickets/clock"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -12,22 +12,22 @@ func TestTicketNewIsNotValidated(t *testing.T) {
 	assert := assert.New(t)
 	policy := bvgtickets.Policy{ValidFor: time.Minute}
 	ticket := bvgtickets.New(policy)
-	clock := utils.NewMockClock(time.Now())
+	mockClock := clock.Mock(time.Now())
 
 	assert.NotNil(ticket)
-	assert.False(ticket.IsValid(clock))
+	assert.False(ticket.IsValid(mockClock))
 }
 
 func TestTicketIsValid(t *testing.T) {
 	assert := assert.New(t)
 	now := time.Now()
-	clock := utils.NewMockClock(now)
+	mockClock := clock.Mock(now)
 	policy := bvgtickets.Policy{ValidFor: time.Minute * 120}
 	ticket := bvgtickets.New(policy)
-	ticket.Validate(clock)
-	assert.True(ticket.IsValid(clock))
+	ticket.Validate(mockClock)
+	assert.True(ticket.IsValid(mockClock))
 
 	now = now.Add(policy.ValidFor + 1)
-	clock = utils.NewMockClock(now)
-	assert.False(ticket.IsValid(clock))
+	mockClock = clock.Mock(now)
+	assert.False(ticket.IsValid(mockClock))
 }
