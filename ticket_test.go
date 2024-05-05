@@ -11,4 +11,13 @@ func TestTicketNew(t *testing.T) {
 	ticket := bvgtickets.New()
 
 	assert.NotNil(ticket)
+	assert.False(ticket.IsValid())
+}
+
+func TestTicketValidate(t *testing.T) {
+	assert := assert.New(t)
+	ticket := bvgtickets.New()
+	ticket.Validate()
+
+	assert.True(ticket.IsValid())
 }
