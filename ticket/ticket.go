@@ -3,6 +3,7 @@ package ticket
 import (
 	"bvg-tickets/clock"
 	"bvg-tickets/zone"
+	"fmt"
 	"time"
 )
 
@@ -33,12 +34,13 @@ func (t ticket) IsValidated() bool {
 	return !t.validation.createdAt.Before(t.createdAt)
 }
 
-func (t *ticket) Validate(clock clock.Clock, startLocation string) {
+func (t *ticket) Validate(clock clock.Clock, startLocation string) error {
 	if t.IsValidated() {
-		return
+		return fmt.Errorf("Ticket is already validated")
 	}
 
 	t.validation = validation{clock.Now(), startLocation}
+	return nil
 }
 
 func (t ticket) ValidFrom() time.Time {
