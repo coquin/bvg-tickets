@@ -26,3 +26,18 @@ func TestSingleTicket(t *testing.T) {
 	assert.Equal(t, later, ticket.ValidFrom())
 	assert.Equal(t, "Berlin Hauptbahnhof", ticket.StartLocation())
 }
+
+func TestSingleTicketCannotBeValidatedTwice(t *testing.T) {
+	now := time.Now()
+	mockClock := clock.Mock(now)
+	ticket := ticket.Single(mockClock)
+	ticket.Validate(mockClock, "Berlin Hauptbahnhof")
+
+	later := now.Add(time.Hour)
+	mockClock = clock.Mock(later)
+	ticket.Validate(mockClock, "Berlin Ostbahnhof")
+
+	assert.True(t, ticket.IsValidated())
+	assert.Equal(t, now, ticket.ValidFrom())
+	assert.Equal(t, "Berlin Hauptbahnhof", ticket.StartLocation())
+}

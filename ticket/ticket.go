@@ -6,13 +6,19 @@ import (
 )
 
 type ticket struct {
-	createdAt     time.Time
-	validatedAt   time.Time
-	startLocation string
+	createdAt  time.Time
+	validation validation
 }
 
+type validation struct {
+	createdAt time.Time
+	location  string
+}
+
+var emptyValidation validation = validation{time.Time{}, ""}
+
 func Single(clock clock.Clock) ticket {
-	return ticket{clock.Now(), time.Time{}, ""}
+	return ticket{clock.Now(), emptyValidation}
 }
 
 func (t ticket) CreatedAt() time.Time {
@@ -20,18 +26,21 @@ func (t ticket) CreatedAt() time.Time {
 }
 
 func (t ticket) IsValidated() bool {
-	return !t.validatedAt.Before(t.createdAt)
+	return !t.validation.createdAt.Before(t.createdAt)
 }
 
 func (t *ticket) Validate(clock clock.Clock, startLocation string) {
-	t.validatedAt = clock.Now()
-	t.startLocation = startLocation
+	if t.IsValidated() {
+		return
+	}
+
+	t.validation = validation{clock.Now(), startLocation}
 }
 
 func (t ticket) ValidFrom() time.Time {
-	return t.validatedAt
+	return t.validation.createdAt
 }
 
 func (t ticket) StartLocation() string {
-	return t.startLocation
+	return t.validation.location
 }
