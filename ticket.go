@@ -2,6 +2,7 @@ package bvg_tickets
 
 import (
 	"bvg-tickets/clock"
+	"bvg-tickets/zone"
 	"time"
 )
 
@@ -9,17 +10,17 @@ type ticket struct {
 	createdAt     time.Time
 	validFrom     time.Time
 	validFor      time.Duration
-	zone          Zone
+	zone          zone.Zone
 	startLocation string
 }
 
 // Deprecated
 // TODO: remove
-func New(clock clock.Clock, zone Zone, start string) ticket {
+func New(clock clock.Clock, zone zone.Zone, start string) ticket {
 	return ticket{clock.Now(), time.Time{}, 0, zone, start}
 }
 
-func Single(clock clock.Clock, zone Zone, duration time.Duration, start string) ticket {
+func Single(clock clock.Clock, zone zone.Zone, duration time.Duration, start string) ticket {
 	return ticket{clock.Now(), time.Time{}, duration, zone, start}
 }
 

@@ -3,6 +3,7 @@ package bvg_tickets_test
 import (
 	bvg_tickets "bvg-tickets"
 	"bvg-tickets/clock"
+	"bvg-tickets/zone"
 	"testing"
 	"time"
 
@@ -12,7 +13,7 @@ import (
 func TestNewTicket(t *testing.T) {
 	now := time.Now()
 	mockClock := clock.Mock(now)
-	ticket := bvg_tickets.New(mockClock, bvg_tickets.ZoneAB, "Berlin Hauptbahnhof")
+	ticket := bvg_tickets.New(mockClock, zone.AB, "Berlin Hauptbahnhof")
 	assert.NotNil(t, ticket)
 	assert.Equal(t, now, ticket.CreatedAt())
 }
@@ -21,7 +22,7 @@ func TestSingleTicket(t *testing.T) {
 	now := time.Now()
 	mockClock := clock.Mock(now)
 	twoHours := time.Hour * 2
-	ticket := bvg_tickets.Single(mockClock, bvg_tickets.ZoneAB, twoHours, "Berlin Hauptbahnhof")
+	ticket := bvg_tickets.Single(mockClock, zone.AB, twoHours, "Berlin Hauptbahnhof")
 	ticket.Validate(mockClock)
 
 	assert.Equal(t, now, ticket.CreatedAt())

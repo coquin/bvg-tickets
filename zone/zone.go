@@ -1,12 +1,12 @@
-package bvg_tickets
+package zone
 
 // Thanks to https://www.reddit.com/r/golang/comments/uvpygm/comment/iab61oh/
 type Zone int
 
 const (
-	ZoneABC Zone = iota
-	ZoneAB
-	ZoneBC
+	ABC Zone = iota
+	AB
+	BC
 )
 
 func (z Zone) String() string {
