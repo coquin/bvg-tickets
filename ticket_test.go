@@ -12,7 +12,7 @@ import (
 func TestNewTicket(t *testing.T) {
 	now := time.Now()
 	mockClock := clock.Mock(now)
-	ticket := bvg_tickets.New(mockClock, bvg_tickets.ZoneAB)
+	ticket := bvg_tickets.New(mockClock, bvg_tickets.ZoneAB, "Berlin Hauptbahnhof")
 	assert.NotNil(t, ticket)
 	assert.Equal(t, now, ticket.CreatedAt())
 }
@@ -21,7 +21,7 @@ func TestSingleTicket(t *testing.T) {
 	now := time.Now()
 	mockClock := clock.Mock(now)
 	twoHours := time.Hour * 2
-	ticket := bvg_tickets.Single(mockClock, bvg_tickets.ZoneAB, twoHours)
+	ticket := bvg_tickets.Single(mockClock, bvg_tickets.ZoneAB, twoHours, "Berlin Hauptbahnhof")
 	ticket.Validate(mockClock)
 
 	assert.Equal(t, now, ticket.CreatedAt())

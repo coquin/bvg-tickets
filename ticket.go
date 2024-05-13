@@ -6,20 +6,21 @@ import (
 )
 
 type ticket struct {
-	createdAt time.Time
-	validFrom time.Time
-	validFor  time.Duration
-	zone      Zone
+	createdAt     time.Time
+	validFrom     time.Time
+	validFor      time.Duration
+	zone          Zone
+	startLocation string
 }
 
 // Deprecated
 // TODO: remove
-func New(clock clock.Clock, zone Zone) ticket {
-	return ticket{clock.Now(), time.Time{}, 0, zone}
+func New(clock clock.Clock, zone Zone, start string) ticket {
+	return ticket{clock.Now(), time.Time{}, 0, zone, start}
 }
 
-func Single(clock clock.Clock, zone Zone, duration time.Duration) ticket {
-	return ticket{clock.Now(), time.Time{}, duration, zone}
+func Single(clock clock.Clock, zone Zone, duration time.Duration, start string) ticket {
+	return ticket{clock.Now(), time.Time{}, duration, zone, start}
 }
 
 func (t ticket) CreatedAt() time.Time {
