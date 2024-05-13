@@ -6,9 +6,9 @@ import (
 )
 
 type ticket struct {
-	createdAt   time.Time
-	validatedAt time.Time
-	validFor    time.Duration
+	createdAt time.Time
+	validFrom time.Time
+	validFor  time.Duration
 }
 
 func New(clock clock.Clock) ticket {
@@ -24,13 +24,13 @@ func (t ticket) CreatedAt() time.Time {
 }
 
 func (t *ticket) Validate(clock clock.Clock) {
-	t.validatedAt = clock.Now()
+	t.validFrom = clock.Now()
 }
 
 func (t ticket) ValidFrom() time.Time {
-	return t.validatedAt
+	return t.validFrom
 }
 
 func (t ticket) ValidUntil() time.Time {
-	return t.validatedAt.Add(t.validFor)
+	return t.validFrom.Add(t.validFor)
 }
