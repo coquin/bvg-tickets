@@ -14,6 +14,10 @@ type ticket struct {
 	startLocation string
 }
 
+const (
+	d24h time.Duration = time.Hour * 24
+)
+
 // Deprecated
 // TODO: remove
 func New(clock clock.Clock, zone zone.Zone, start string) ticket {
@@ -22,6 +26,10 @@ func New(clock clock.Clock, zone zone.Zone, start string) ticket {
 
 func Single(clock clock.Clock, zone zone.Zone, duration time.Duration, start string) ticket {
 	return ticket{clock.Now(), time.Time{}, duration, zone, start}
+}
+
+func T24h(clock clock.Clock, zone zone.Zone) ticket {
+	return ticket{clock.Now(), time.Time{}, d24h, zone, ""}
 }
 
 func (t ticket) CreatedAt() time.Time {

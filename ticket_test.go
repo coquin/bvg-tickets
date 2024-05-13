@@ -31,3 +31,14 @@ func TestSingleTicket(t *testing.T) {
 	twoHoursLater := now.Add(twoHours)
 	assert.Equal(t, twoHoursLater, ticket.ValidUntil())
 }
+
+func Test24hTicket(t *testing.T) {
+	now := time.Now()
+	mockClock := clock.Mock(now)
+	ticket := bvg_tickets.T24h(mockClock, zone.AB)
+	ticket.Validate(mockClock)
+
+	assert.Equal(t, now, ticket.CreatedAt())
+	assert.Equal(t, now, ticket.ValidFrom())
+	assert.Equal(t, now.Add(time.Hour*24), ticket.ValidUntil())
+}
