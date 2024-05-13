@@ -17,11 +17,11 @@ func TestNewTicket(t *testing.T) {
 	assert.Equal(t, now, ticket.CreatedAt())
 }
 
-func TestNewTimeLimitedTicket(t *testing.T) {
+func TestSingleTicket(t *testing.T) {
 	now := time.Now()
 	mockClock := clock.Mock(now)
 	twoHours := time.Hour * 2
-	ticket := bvg_tickets.NewTimeLimited(mockClock, bvg_tickets.ZoneAB, twoHours)
+	ticket := bvg_tickets.Single(mockClock, bvg_tickets.ZoneAB, twoHours)
 	ticket.Validate(mockClock)
 
 	assert.Equal(t, now, ticket.CreatedAt())

@@ -12,11 +12,13 @@ type ticket struct {
 	zone      Zone
 }
 
+// Deprecated
+// TODO: remove
 func New(clock clock.Clock, zone Zone) ticket {
 	return ticket{clock.Now(), time.Time{}, 0, zone}
 }
 
-func NewTimeLimited(clock clock.Clock, zone Zone, duration time.Duration) ticket {
+func Single(clock clock.Clock, zone Zone, duration time.Duration) ticket {
 	return ticket{clock.Now(), time.Time{}, duration, zone}
 }
 
