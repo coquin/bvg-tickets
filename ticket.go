@@ -24,8 +24,8 @@ func New(clock clock.Clock, zone zone.Zone, start string) ticket {
 	return ticket{clock.Now(), time.Time{}, 0, zone, start}
 }
 
-func Single(clock clock.Clock, zone zone.Zone, duration time.Duration, start string) ticket {
-	return ticket{clock.Now(), time.Time{}, duration, zone, start}
+func Single(clock clock.Clock, zone zone.Zone, duration time.Duration) ticket {
+	return ticket{clock.Now(), time.Time{}, duration, zone, ""}
 }
 
 func T24h(clock clock.Clock, zone zone.Zone) ticket {
@@ -36,8 +36,9 @@ func (t ticket) CreatedAt() time.Time {
 	return t.createdAt
 }
 
-func (t *ticket) Validate(clock clock.Clock) {
+func (t *ticket) Validate(clock clock.Clock, startLocation string) {
 	t.validFrom = clock.Now()
+	t.startLocation = startLocation
 }
 
 func (t ticket) ValidFrom() time.Time {
