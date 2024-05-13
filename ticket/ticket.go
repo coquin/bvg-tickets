@@ -2,12 +2,14 @@ package ticket
 
 import (
 	"bvg-tickets/clock"
+	"bvg-tickets/zone"
 	"time"
 )
 
 type ticket struct {
 	createdAt  time.Time
 	validation validation
+	zone       zone.Zone
 }
 
 type validation struct {
@@ -19,8 +21,8 @@ const ValidDuration time.Duration = time.Hour * 2
 
 var emptyValidation validation = validation{time.Time{}, ""}
 
-func Single(clock clock.Clock) ticket {
-	return ticket{clock.Now(), emptyValidation}
+func Single(clock clock.Clock, zone zone.Zone) ticket {
+	return ticket{clock.Now(), emptyValidation, zone}
 }
 
 func (t ticket) CreatedAt() time.Time {
