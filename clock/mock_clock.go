@@ -2,14 +2,14 @@ package clock
 
 import "time"
 
-type MockClock struct {
+type mockClock struct {
 	t time.Time
 }
 
-func Mock(t time.Time) MockClock {
-	return MockClock{t}
+func Mock(t time.Time) mockClock {
+	return mockClock{t}
 }
 
-func (m MockClock) Now() time.Time {
+func (m mockClock) Now() time.Time {
 	return m.t
 }

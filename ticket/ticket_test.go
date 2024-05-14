@@ -12,16 +12,16 @@ import (
 
 func TestSingleTicket(t *testing.T) {
 	now := time.Now()
-	mockClock := clock.Mock(now)
-	_ticket := ticket.Single(mockClock, zone.AB)
+	_clock := clock.Mock(now)
+	_ticket := ticket.Single(_clock, zone.AB)
 
 	assert.NotNil(t, _ticket)
 	assert.Equal(t, now, _ticket.CreatedAt())
 	assert.False(t, _ticket.IsValidated())
 
 	later := now.Add(time.Minute)
-	mockClock = clock.Mock(later)
-	err := _ticket.Validate(mockClock, "Berlin Hauptbahnhof")
+	_clock = clock.Mock(later)
+	err := _ticket.Validate(_clock, "Berlin Hauptbahnhof")
 
 	if assert.NoError(t, err) {
 		assert.True(t, _ticket.IsValidated())
@@ -33,14 +33,14 @@ func TestSingleTicket(t *testing.T) {
 
 func TestSingleTicketCannotBeValidatedTwice(t *testing.T) {
 	now := time.Now()
-	mockClock := clock.Mock(now)
-	_ticket := ticket.Single(mockClock, zone.AB)
-	_ticket.Validate(mockClock, "Berlin Hauptbahnhof")
+	_clock := clock.Mock(now)
+	_ticket := ticket.Single(_clock, zone.AB)
+	_ticket.Validate(_clock, "Berlin Hauptbahnhof")
 
 	later := now.Add(time.Hour)
-	mockClock = clock.Mock(later)
+	_clock = clock.Mock(later)
 
-	err := _ticket.Validate(mockClock, "Berlin Ostbahnhof")
+	err := _ticket.Validate(_clock, "Berlin Ostbahnhof")
 	assert.Error(t, err)
 
 	assert.True(t, _ticket.IsValidated())
