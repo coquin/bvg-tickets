@@ -10,41 +10,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSingleTicket(t *testing.T) {
-	now := time.Now()
-	_clock := clock.Mock(now)
-	_ticket := ticket.Single(_clock, zone.AB)
-
+func TestTicket(t *testing.T) {
+	_ticket := ticket.New(zone.AB)
 	assert.NotNil(t, _ticket)
-	assert.Equal(t, now, _ticket.CreatedAt())
-	assert.False(t, _ticket.IsValidated())
+	assert.Equal(t, zone.AB, _ticket.Zone)
 
-	later := now.Add(time.Minute)
-	_clock = clock.Mock(later)
-	err := _ticket.Validate(_clock, "Berlin Hauptbahnhof")
-
-	if assert.NoError(t, err) {
-		assert.True(t, _ticket.IsValidated())
-		assert.Equal(t, later, _ticket.ValidFrom())
-		assert.Equal(t, later.Add(ticket.ValidDuration), _ticket.ValidUntil())
-		assert.Equal(t, "Berlin Hauptbahnhof", _ticket.StartLocation())
-	}
-}
-
-func TestSingleTicketCannotBeValidatedTwice(t *testing.T) {
 	now := time.Now()
 	_clock := clock.Mock(now)
-	_ticket := ticket.Single(_clock, zone.AB)
-	_ticket.Validate(_clock, "Berlin Hauptbahnhof")
-
-	later := now.Add(time.Hour)
-	_clock = clock.Mock(later)
-
-	err := _ticket.Validate(_clock, "Berlin Ostbahnhof")
-	assert.Error(t, err)
-
-	assert.True(t, _ticket.IsValidated())
-	assert.Equal(t, now, _ticket.ValidFrom())
-	assert.Equal(t, now.Add(ticket.ValidDuration), _ticket.ValidUntil())
-	assert.Equal(t, "Berlin Hauptbahnhof", _ticket.StartLocation())
+	_validatedTicket := _ticket.Validate(_clock)
+	assert.Equal(t, now, _validatedTicket.ValidFrom)
 }
