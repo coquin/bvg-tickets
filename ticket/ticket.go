@@ -22,3 +22,12 @@ type validatedTicket struct {
 	ticket
 	ValidFrom time.Time
 }
+
+func (t validatedTicket) AtLocation(location string) validatedTicketAtLocation {
+	return validatedTicketAtLocation{t, location}
+}
+
+type validatedTicketAtLocation struct {
+	validatedTicket
+	StartLocation string
+}

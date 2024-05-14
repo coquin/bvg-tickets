@@ -19,4 +19,8 @@ func TestTicket(t *testing.T) {
 	_clock := clock.Mock(now)
 	_validatedTicket := _ticket.Validate(_clock)
 	assert.Equal(t, now, _validatedTicket.ValidFrom)
+
+	startLocation := "Berlin Hauptbahnhof"
+	_ticketValidatedAtLocation := _validatedTicket.AtLocation(startLocation)
+	assert.Equal(t, startLocation, _ticketValidatedAtLocation.StartLocation)
 }
