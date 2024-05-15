@@ -6,6 +6,34 @@ import (
 	"time"
 )
 
+type Validation interface {
+	ValidFrom() time.Time
+	ValidTill() time.Time
+}
+
+type singleTicketValidation struct {
+	when    time.Time
+	howLong time.Duration
+	where   string
+}
+
+func (v singleTicketValidation) ValidFrom() time.Time {
+	return v.when
+}
+
+func (v singleTicketValidation) ValidTill() time.Time {
+	return v.when.Add(v.howLong)
+}
+
+type ValidatedTicket interface {
+	ValidFrom() time.Time
+	ValidTill() time.Time
+}
+
+type Validator interface {
+	Validate() ValidatedTicket
+}
+
 type ticket struct {
 	Zone zone.Zone
 }
@@ -17,15 +45,14 @@ type singleTripTicket struct {
 
 type validatedSingleTripTicket struct {
 	singleTripTicket
-	ValidFrom     time.Time
-	ValidUntil    time.Time
+	Validation
 	StartLocation string
 }
 
-func (t singleTripTicket) Validate(clock clock.Clock, location string) validatedSingleTripTicket {
+func (t singleTripTicket) Validate(clock clock.Clock, location string) ValidatedTicket {
 	validFrom := clock.Now()
-	validUntil := validFrom.Add(time.Hour * 2)
-	return validatedSingleTripTicket{t, validFrom, validUntil, location}
+	validation := singleTicketValidation{validFrom, t.validFor, location}
+	return validatedSingleTripTicket{t, validation, location}
 }
 
 func New(zone zone.Zone) ticket {
