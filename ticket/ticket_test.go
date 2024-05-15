@@ -30,7 +30,10 @@ func TestSingleTripTicket(t *testing.T) {
 	_clock := clock.Mock(now)
 	startLocation := "Berlin Hauptbahnhof"
 
-	_ticket := ticket.SingleTrip(zone.AB, _clock, startLocation)
-	assert.Equal(t, now, _ticket.ValidFrom)
-	assert.Equal(t, startLocation, _ticket.StartLocation)
+	_ticket := ticket.SingleTrip(zone.AB)
+
+	_validatedTicket := _ticket.Validate(_clock, startLocation)
+	assert.Equal(t, now, _validatedTicket.ValidFrom)
+	assert.Equal(t, now.Add(time.Hour*2), _validatedTicket.ValidUntil)
+	assert.Equal(t, startLocation, _validatedTicket.StartLocation)
 }

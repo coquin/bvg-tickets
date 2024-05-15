@@ -10,6 +10,24 @@ type ticket struct {
 	Zone zone.Zone
 }
 
+type singleTripTicket struct {
+	Zone     zone.Zone
+	validFor time.Duration
+}
+
+type validatedSingleTripTicket struct {
+	singleTripTicket
+	ValidFrom     time.Time
+	ValidUntil    time.Time
+	StartLocation string
+}
+
+func (t singleTripTicket) Validate(clock clock.Clock, location string) validatedSingleTripTicket {
+	validFrom := clock.Now()
+	validUntil := validFrom.Add(time.Hour * 2)
+	return validatedSingleTripTicket{t, validFrom, validUntil, location}
+}
+
 func New(zone zone.Zone) ticket {
 	return ticket{zone}
 }
@@ -32,6 +50,6 @@ type validatedTicketAtLocation struct {
 	StartLocation string
 }
 
-func SingleTrip(zone zone.Zone, clock clock.Clock, location string) validatedTicketAtLocation {
-	return New(zone).Validate(clock).AtLocation(location)
+func SingleTrip(zone zone.Zone) singleTripTicket {
+	return singleTripTicket{zone, time.Hour * 2}
 }
