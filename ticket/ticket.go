@@ -31,3 +31,7 @@ type validatedTicketAtLocation struct {
 	validatedTicket
 	StartLocation string
 }
+
+func SingleTrip(zone zone.Zone, clock clock.Clock, location string) validatedTicketAtLocation {
+	return New(zone).Validate(clock).AtLocation(location)
+}
