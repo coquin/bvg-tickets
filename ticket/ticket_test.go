@@ -1,7 +1,6 @@
 package ticket_test
 
 import (
-	"bvg-tickets/clock"
 	"bvg-tickets/ticket"
 	"bvg-tickets/zone"
 	"testing"
@@ -11,28 +10,16 @@ import (
 )
 
 func TestTicket(t *testing.T) {
-	_ticket := ticket.New(zone.AB)
-	assert.NotNil(t, _ticket)
+	_24h := time.Hour * 24
+	_ticket := ticket.Ticket{zone.AB, _24h}
+
 	assert.Equal(t, zone.AB, _ticket.Zone)
-
-	now := time.Now()
-	_clock := clock.Mock(now)
-	_validatedTicket := _ticket.Validate(_clock)
-	assert.Equal(t, now, _validatedTicket.ValidFrom)
-
-	startLocation := "Berlin Hauptbahnhof"
-	_ticketValidatedAtLocation := _validatedTicket.AtLocation(startLocation)
-	assert.Equal(t, startLocation, _ticketValidatedAtLocation.StartLocation)
+	assert.Equal(t, _24h, _ticket.ValidFor)
 }
 
 func TestSingleTripTicket(t *testing.T) {
-	now := time.Now()
-	_clock := clock.Mock(now)
-	startLocation := "Berlin Hauptbahnhof"
+	_ticket := ticket.SingleTripTicket{ticket.Ticket{zone.AB, time.Hour * 2}}
 
-	_ticket := ticket.SingleTrip(zone.AB).Validate(_clock, startLocation)
-
-	assert.Equal(t, now, _ticket.ValidFrom())
-	assert.Equal(t, now.Add(time.Hour*2), _ticket.ValidTill())
-	// assert.Equal(t, startLocation, _ticket.StartLocation)
+	assert.Equal(t, zone.AB, _ticket.Zone)
+	assert.Equal(t, time.Hour*2, _ticket.ValidFor)
 }
