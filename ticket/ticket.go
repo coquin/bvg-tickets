@@ -26,5 +26,5 @@ type Repository interface {
 
 type UseCase interface {
 	Get(int) (*Ticket, error)
-	Create(int, string) (int, error)
+	Purchase(int, string) (int, error)
 }

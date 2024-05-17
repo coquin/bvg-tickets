@@ -12,7 +12,7 @@ func (s *Service) Get(id int) (*Ticket, error) {
 	return s.repo.Read(id)
 }
 
-func (s *Service) Create(userId int, zone string) (int, error) {
+func (s *Service) Purchase(userId int, zone string) (int, error) {
 	id := s.repo.NextId()
 	t := &Ticket{id, userId, zone}
 

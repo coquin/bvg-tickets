@@ -18,7 +18,7 @@ func TestTicketCreate(t *testing.T) {
 	zone := "AB"
 
 	// When user creates a ticket
-	_ticketId, err := useCase.Create(userId, zone)
+	_ticketId, err := useCase.Purchase(userId, zone)
 
 	// Then user has the ticket
 	assert.NoError(t, err)
@@ -32,7 +32,7 @@ func TestTicketGet(t *testing.T) {
 	// Given user created a ticket
 	userId := 1
 	zone := "AB"
-	_ticketId, _ := useCase.Create(userId, zone)
+	_ticketId, _ := useCase.Purchase(userId, zone)
 
 	// When user gets the ticket by id
 	_ticket, err := useCase.Get(_ticketId)
