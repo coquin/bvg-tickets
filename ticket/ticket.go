@@ -3,7 +3,7 @@ package ticket
 import "strconv"
 
 type Ticket struct {
-	Id     TicketId
+	Id     Id
 	UserId UserId
 	Zone   Zone
 }
@@ -16,11 +16,11 @@ func (i UserId) String() string {
 	return strconv.Itoa(i.Value)
 }
 
-type TicketId struct {
+type Id struct {
 	Value int
 }
 
-func (i TicketId) String() string {
+func (i Id) String() string {
 	return strconv.Itoa(i.Value)
 }
 
@@ -38,7 +38,7 @@ func (z Zone) String() string {
 }
 
 type Reader interface {
-	Read(TicketId) (*Ticket, error)
+	Read(Id) (*Ticket, error)
 }
 
 type Writer interface {
@@ -47,7 +47,7 @@ type Writer interface {
 
 type IdGenerator interface {
 	// TODO: should be more generic, to allow generating any ids
-	NextId() TicketId
+	NextId() Id
 }
 
 type Repository interface {
@@ -57,6 +57,6 @@ type Repository interface {
 }
 
 type UseCase interface {
-	Get(TicketId) (*Ticket, error)
-	Purchase(UserId, Zone) (TicketId, error)
+	Get(Id) (*Ticket, error)
+	Purchase(UserId, Zone) (Id, error)
 }

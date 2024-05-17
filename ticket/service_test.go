@@ -22,7 +22,7 @@ func TestTicketCreate(t *testing.T) {
 
 	// Then user has the ticket
 	assert.NoError(t, err)
-	assert.Equal(t, ticket.TicketId{1}, _ticketId)
+	assert.Equal(t, ticket.Id{1}, _ticketId)
 }
 
 func TestTicketGet(t *testing.T) {
@@ -49,7 +49,7 @@ func TestTicketGetNotFound(t *testing.T) {
 	var useCase ticket.UseCase = ticket.NewService(repo)
 
 	// Given ticket does not exist
-	id := ticket.TicketId{1}
+	id := ticket.Id{1}
 
 	// When getting ticket
 	_ticket, err := useCase.Get(id)

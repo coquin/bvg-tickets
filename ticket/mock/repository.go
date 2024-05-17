@@ -7,14 +7,14 @@ import (
 
 type Repository struct {
 	tickets []ticket.Ticket
-	nextId  ticket.TicketId
+	nextId  ticket.Id
 }
 
 func NewRepository() *Repository {
-	return &Repository{make([]ticket.Ticket, 0), ticket.TicketId{Value: 1}}
+	return &Repository{make([]ticket.Ticket, 0), ticket.Id{Value: 1}}
 }
 
-func (r *Repository) Read(id ticket.TicketId) (*ticket.Ticket, error) {
+func (r *Repository) Read(id ticket.Id) (*ticket.Ticket, error) {
 	for _, t := range r.tickets {
 		if t.Id == id {
 			return &t, nil
@@ -28,7 +28,7 @@ func (r *Repository) Write(t *ticket.Ticket) error {
 	return nil
 }
 
-func (r *Repository) NextId() ticket.TicketId {
+func (r *Repository) NextId() ticket.Id {
 	nextId := r.nextId
 	r.nextId.Value += 1
 	return nextId
