@@ -14,7 +14,7 @@ func TestTicketCreate(t *testing.T) {
 	var useCase ticket.UseCase = ticket.NewService(repo)
 
 	// Given user creates a ticket
-	userId := 1
+	userId := ticket.UserId{1}
 	zone := ticket.ZoneAB
 
 	// When user creates a ticket
@@ -22,7 +22,7 @@ func TestTicketCreate(t *testing.T) {
 
 	// Then user has the ticket
 	assert.NoError(t, err)
-	assert.Equal(t, 1, _ticketId)
+	assert.Equal(t, ticket.TicketId{1}, _ticketId)
 }
 
 func TestTicketGet(t *testing.T) {
@@ -30,7 +30,7 @@ func TestTicketGet(t *testing.T) {
 	var useCase ticket.UseCase = ticket.NewService(repo)
 
 	// Given user created a ticket
-	userId := 1
+	userId := ticket.UserId{1}
 	zone := ticket.ZoneAB
 	_ticketId, _ := useCase.Purchase(userId, zone)
 
@@ -49,7 +49,7 @@ func TestTicketGetNotFound(t *testing.T) {
 	var useCase ticket.UseCase = ticket.NewService(repo)
 
 	// Given ticket does not exist
-	id := 1
+	id := ticket.TicketId{1}
 
 	// When getting ticket
 	_ticket, err := useCase.Get(id)

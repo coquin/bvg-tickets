@@ -1,9 +1,27 @@
 package ticket
 
+import "strconv"
+
 type Ticket struct {
-	Id     int
-	UserId int
+	Id     TicketId
+	UserId UserId
 	Zone   Zone
+}
+
+type UserId struct {
+	Value int
+}
+
+func (i UserId) String() string {
+	return strconv.Itoa(i.Value)
+}
+
+type TicketId struct {
+	Value int
+}
+
+func (i TicketId) String() string {
+	return strconv.Itoa(i.Value)
 }
 
 // Thanks to https://www.reddit.com/r/golang/comments/uvpygm/comment/iab61oh/
@@ -20,7 +38,7 @@ func (z Zone) String() string {
 }
 
 type Reader interface {
-	Read(int) (*Ticket, error)
+	Read(TicketId) (*Ticket, error)
 }
 
 type Writer interface {
@@ -28,7 +46,8 @@ type Writer interface {
 }
 
 type IdGenerator interface {
-	NextId() int
+	// TODO: should be more generic, to allow generating any ids
+	NextId() TicketId
 }
 
 type Repository interface {
@@ -38,6 +57,6 @@ type Repository interface {
 }
 
 type UseCase interface {
-	Get(int) (*Ticket, error)
-	Purchase(int, Zone) (int, error)
+	Get(TicketId) (*Ticket, error)
+	Purchase(UserId, Zone) (TicketId, error)
 }

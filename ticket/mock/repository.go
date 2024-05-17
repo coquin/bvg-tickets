@@ -7,20 +7,20 @@ import (
 
 type Repository struct {
 	tickets []ticket.Ticket
-	nextId  int
+	nextId  ticket.TicketId
 }
 
 func NewRepository() *Repository {
-	return &Repository{make([]ticket.Ticket, 0), 1}
+	return &Repository{make([]ticket.Ticket, 0), ticket.TicketId{Value: 1}}
 }
 
-func (r *Repository) Read(id int) (*ticket.Ticket, error) {
+func (r *Repository) Read(id ticket.TicketId) (*ticket.Ticket, error) {
 	for _, t := range r.tickets {
 		if t.Id == id {
 			return &t, nil
 		}
 	}
-	return nil, fmt.Errorf("ticket %d not found", id)
+	return nil, fmt.Errorf("ticket %v not found", id)
 }
 
 func (r *Repository) Write(t *ticket.Ticket) error {
@@ -28,8 +28,8 @@ func (r *Repository) Write(t *ticket.Ticket) error {
 	return nil
 }
 
-func (r *Repository) NextId() int {
+func (r *Repository) NextId() ticket.TicketId {
 	nextId := r.nextId
-	r.nextId += 1
+	r.nextId.Value += 1
 	return nextId
 }
