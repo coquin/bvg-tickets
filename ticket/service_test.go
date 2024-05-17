@@ -13,11 +13,11 @@ func TestTicketPurchase(t *testing.T) {
 	repo := mock.NewRepository()
 	var useCase ticket.UseCase = ticket.NewService(repo)
 
-	// Given user creates a ticket
+	// Given user wants to purchase a ticket for AB zone
 	userId := ticket.UserId{1}
 	zone := ticket.ZoneAB
 
-	// When user creates a ticket
+	// When user purchases a ticket
 	_ticketId, err := useCase.Purchase(userId, zone)
 
 	// Then user has the ticket
@@ -29,7 +29,7 @@ func TestTicketGet(t *testing.T) {
 	repo := mock.NewRepository()
 	var useCase ticket.UseCase = ticket.NewService(repo)
 
-	// Given user created a ticket
+	// Given user purchased a ticket
 	userId := ticket.UserId{1}
 	zone := ticket.ZoneAB
 	_ticketId, _ := useCase.Purchase(userId, zone)
