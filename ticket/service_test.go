@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTicketCreate(t *testing.T) {
+func TestTicketPurchase(t *testing.T) {
 	repo := mock.NewRepository()
 	var useCase ticket.UseCase = ticket.NewService(repo)
 
