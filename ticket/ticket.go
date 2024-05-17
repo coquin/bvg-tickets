@@ -3,7 +3,20 @@ package ticket
 type Ticket struct {
 	Id     int
 	UserId int
-	Zone   string
+	Zone   Zone
+}
+
+// Thanks to https://www.reddit.com/r/golang/comments/uvpygm/comment/iab61oh/
+type Zone int
+
+const (
+	ZoneABC Zone = iota
+	ZoneAB
+	ZoneBC
+)
+
+func (z Zone) String() string {
+	return []string{"ABC", "AB", "BC"}[z]
 }
 
 type Reader interface {
@@ -26,5 +39,5 @@ type Repository interface {
 
 type UseCase interface {
 	Get(int) (*Ticket, error)
-	Purchase(int, string) (int, error)
+	Purchase(int, Zone) (int, error)
 }
