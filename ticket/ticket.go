@@ -3,9 +3,10 @@ package ticket
 import "strconv"
 
 type Ticket struct {
-	Id     Id
-	UserId UserId
-	Zone   Zone
+	Id          Id
+	UserId      UserId
+	Zone        Zone
+	IsValidated bool
 }
 
 type UserId struct {
@@ -59,4 +60,5 @@ type Repository interface {
 type UseCase interface {
 	Get(Id) (*Ticket, error)
 	Purchase(UserId, Zone) (Id, error)
+	Validate(Id) error
 }

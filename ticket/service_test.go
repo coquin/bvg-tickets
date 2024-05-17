@@ -40,7 +40,7 @@ func TestTicketGet(t *testing.T) {
 	// Then ticket is returned
 	assert.NoError(t, err)
 
-	expectedTicket := &ticket.Ticket{_ticketId, userId, zone}
+	expectedTicket := &ticket.Ticket{_ticketId, userId, zone, false}
 	assert.Equal(t, expectedTicket, _ticket)
 }
 
@@ -60,4 +60,24 @@ func TestTicketGetNotFound(t *testing.T) {
 		assert.Equal(t, expectedError, err)
 	}
 	assert.Nil(t, _ticket)
+}
+
+func TestTicketValidate(t *testing.T) {
+	repo := mock.NewRepository()
+	var useCase ticket.UseCase = ticket.NewService(repo)
+
+	// Given user purchased a ticket
+	userId := ticket.UserId{1}
+	zone := ticket.ZoneAB
+	_ticketId, _ := useCase.Purchase(userId, zone)
+
+	// When user validates a ticket
+	err := useCase.Validate(_ticketId)
+
+	// Then the ticket is validated
+	assert.NoError(t, err)
+
+	_ticket, _ := useCase.Get(_ticketId)
+	expectedTicket := &ticket.Ticket{_ticketId, userId, zone, true}
+	assert.Equal(t, expectedTicket, _ticket)
 }

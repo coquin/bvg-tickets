@@ -6,25 +6,24 @@ import (
 )
 
 type Repository struct {
-	tickets []ticket.Ticket
+	tickets map[ticket.Id]ticket.Ticket
 	nextId  ticket.Id
 }
 
 func NewRepository() *Repository {
-	return &Repository{make([]ticket.Ticket, 0), ticket.Id{Value: 1}}
+	return &Repository{make(map[ticket.Id]ticket.Ticket), ticket.Id{Value: 1}}
 }
 
 func (r *Repository) Read(id ticket.Id) (*ticket.Ticket, error) {
-	for _, t := range r.tickets {
-		if t.Id == id {
-			return &t, nil
-		}
+	if t, ok := r.tickets[id]; ok {
+		return &t, nil
 	}
+
 	return nil, fmt.Errorf("ticket %v not found", id)
 }
 
 func (r *Repository) Write(t *ticket.Ticket) error {
-	r.tickets = append(r.tickets, *t)
+	r.tickets[t.Id] = *t
 	return nil
 }
 
