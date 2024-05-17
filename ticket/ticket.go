@@ -6,6 +6,24 @@ type Ticket struct {
 	Zone   string
 }
 
+type Reader interface {
+	Read(int) (*Ticket, error)
+}
+
+type Writer interface {
+	Write(*Ticket) error
+}
+
+type IdGenerator interface {
+	NextId() int
+}
+
+type Repository interface {
+	Reader
+	Writer
+	IdGenerator
+}
+
 type UseCase interface {
 	Get(int) (*Ticket, error)
 	Create(int, string) (int, error)

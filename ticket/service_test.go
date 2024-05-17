@@ -2,13 +2,16 @@ package ticket_test
 
 import (
 	"bvg-tickets/ticket"
+	"bvg-tickets/ticket/mock"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestTicketCreate(t *testing.T) {
-	var useCase ticket.UseCase = ticket.NewService()
+	repo := mock.NewRepository()
+	var useCase ticket.UseCase = ticket.NewService(repo)
 
 	// Given user creates a ticket
 	userId := 1
@@ -23,7 +26,8 @@ func TestTicketCreate(t *testing.T) {
 }
 
 func TestTicketGet(t *testing.T) {
-	var useCase ticket.UseCase = ticket.NewService()
+	repo := mock.NewRepository()
+	var useCase ticket.UseCase = ticket.NewService(repo)
 
 	// Given user created a ticket
 	userId := 1
@@ -38,4 +42,22 @@ func TestTicketGet(t *testing.T) {
 
 	expectedTicket := &ticket.Ticket{_ticketId, userId, zone}
 	assert.Equal(t, expectedTicket, _ticket)
+}
+
+func TestTicketGetNotFound(t *testing.T) {
+	repo := mock.NewRepository()
+	var useCase ticket.UseCase = ticket.NewService(repo)
+
+	// Given ticket does not exist
+	id := 1
+
+	// When getting ticket
+	_ticket, err := useCase.Get(id)
+
+	// Then an error is returned
+	expectedError := fmt.Errorf("ticket 1 not found")
+	if assert.Error(t, err) {
+		assert.Equal(t, expectedError, err)
+	}
+	assert.Nil(t, _ticket)
 }

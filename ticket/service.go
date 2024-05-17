@@ -1,15 +1,23 @@
 package ticket
 
-type Service struct{}
+type Service struct {
+	repo Repository
+}
 
-func NewService() *Service {
-	return &Service{}
+func NewService(r Repository) *Service {
+	return &Service{r}
 }
 
 func (s *Service) Get(id int) (*Ticket, error) {
-	return &Ticket{id, 1, "AB"}, nil
+	return s.repo.Read(id)
 }
 
 func (s *Service) Create(userId int, zone string) (int, error) {
-	return 1, nil
+	id := s.repo.NextId()
+	t := &Ticket{id, userId, zone}
+
+	if err := s.repo.Write(t); err != nil {
+		return 0, err
+	}
+	return id, nil
 }
