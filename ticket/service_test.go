@@ -81,3 +81,23 @@ func TestTicketValidate(t *testing.T) {
 	expectedTicket := &ticket.Ticket{_ticketId, userId, zone, true}
 	assert.Equal(t, expectedTicket, _ticket)
 }
+
+func TestTicketDoubleValidate(t *testing.T) {
+	repo := mock.NewRepository()
+	var useCase ticket.UseCase = ticket.NewService(repo)
+
+	// Given user purchased and validated a ticket
+	userId := ticket.UserId{1}
+	zone := ticket.ZoneAB
+	_ticketId, _ := useCase.Purchase(userId, zone)
+	useCase.Validate(_ticketId)
+
+	// When user validates a ticket
+	err := useCase.Validate(_ticketId)
+
+	// Then an error is returned
+	expectedError := fmt.Errorf("ticket is already validated")
+	if assert.Error(t, err) {
+		assert.Equal(t, expectedError, err)
+	}
+}

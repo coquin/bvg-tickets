@@ -1,5 +1,9 @@
 package ticket
 
+import (
+	"errors"
+)
+
 type Service struct {
 	repo Repository
 }
@@ -27,6 +31,10 @@ func (s *Service) Validate(id Id) error {
 
 	if err != nil {
 		return err
+	}
+
+	if t.IsValidated {
+		return errors.New("ticket is already validated")
 	}
 
 	t.IsValidated = true
