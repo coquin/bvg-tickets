@@ -4,17 +4,8 @@ import "strconv"
 
 type Ticket struct {
 	Id          Id
-	UserId      UserId
 	Zone        Zone
 	IsValidated bool
-}
-
-type UserId struct {
-	Value int
-}
-
-func (i UserId) String() string {
-	return strconv.Itoa(i.Value)
 }
 
 type Id struct {
@@ -59,6 +50,6 @@ type Repository interface {
 
 type UseCase interface {
 	Get(Id) (*Ticket, error)
-	Purchase(UserId, Zone) (Id, error)
+	Purchase(Zone) (Id, error)
 	Validate(Id) error
 }

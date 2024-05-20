@@ -14,11 +14,10 @@ func TestTicketPurchase(t *testing.T) {
 	var useCase ticket.UseCase = ticket.NewService(repo)
 
 	// Given user wants to purchase a ticket for AB zone
-	userId := ticket.UserId{1}
 	zone := ticket.ZoneAB
 
 	// When user purchases a ticket
-	_ticketId, err := useCase.Purchase(userId, zone)
+	_ticketId, err := useCase.Purchase(zone)
 
 	// Then user has the ticket
 	assert.NoError(t, err)
@@ -30,9 +29,8 @@ func TestTicketGet(t *testing.T) {
 	var useCase ticket.UseCase = ticket.NewService(repo)
 
 	// Given user purchased a ticket
-	userId := ticket.UserId{1}
 	zone := ticket.ZoneAB
-	_ticketId, _ := useCase.Purchase(userId, zone)
+	_ticketId, _ := useCase.Purchase(zone)
 
 	// When user gets the ticket by id
 	_ticket, err := useCase.Get(_ticketId)
@@ -40,7 +38,7 @@ func TestTicketGet(t *testing.T) {
 	// Then ticket is returned
 	assert.NoError(t, err)
 
-	expectedTicket := &ticket.Ticket{_ticketId, userId, zone, false}
+	expectedTicket := &ticket.Ticket{_ticketId, zone, false}
 	assert.Equal(t, expectedTicket, _ticket)
 }
 
@@ -67,9 +65,8 @@ func TestTicketValidate(t *testing.T) {
 	var useCase ticket.UseCase = ticket.NewService(repo)
 
 	// Given user purchased a ticket
-	userId := ticket.UserId{1}
 	zone := ticket.ZoneAB
-	_ticketId, _ := useCase.Purchase(userId, zone)
+	_ticketId, _ := useCase.Purchase(zone)
 
 	// When user validates a ticket
 	err := useCase.Validate(_ticketId)
@@ -78,7 +75,7 @@ func TestTicketValidate(t *testing.T) {
 	assert.NoError(t, err)
 
 	_ticket, _ := useCase.Get(_ticketId)
-	expectedTicket := &ticket.Ticket{_ticketId, userId, zone, true}
+	expectedTicket := &ticket.Ticket{_ticketId, zone, true}
 	assert.Equal(t, expectedTicket, _ticket)
 }
 
@@ -87,9 +84,8 @@ func TestTicketDoubleValidate(t *testing.T) {
 	var useCase ticket.UseCase = ticket.NewService(repo)
 
 	// Given user purchased and validated a ticket
-	userId := ticket.UserId{1}
 	zone := ticket.ZoneAB
-	_ticketId, _ := useCase.Purchase(userId, zone)
+	_ticketId, _ := useCase.Purchase(zone)
 	useCase.Validate(_ticketId)
 
 	// When user validates a ticket
